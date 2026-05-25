@@ -28,9 +28,9 @@ jobs:
           apt-get update
           apt-get install -y ca-certificates git make python3 python3-dnspython
 
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v8.1.0
 
       - name: Show runtime versions
         run: |
@@ -63,11 +63,11 @@ jobs:
             dnspython: "latest-2.x"
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
-      - uses: astral-sh/setup-uv@v5
+      - uses: astral-sh/setup-uv@v8.1.0
 
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           python-version: ${{ matrix.python }}
 
