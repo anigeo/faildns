@@ -20,6 +20,7 @@ Operational files are at the repository root: `faildns.service`, `faildns.defaul
 - `make format`: format with Ruff.
 - `make lint`: lint with Ruff.
 - `make test`: run all unit and integration tests with system `python3`.
+- `make uv-test`: run all tests in the uv-managed environment; use `DNSPYTHON=2.3.0`, `2.7.0`, `2.8.0`, or `latest-2.x` when matching CI variants.
 - `make check`: run lint, syntax check, and tests.
 - `sudo make install`: install the script to `/usr/local/bin/faildns` plus systemd and default-env files.
 

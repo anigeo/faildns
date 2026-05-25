@@ -5,9 +5,22 @@ on:
   pull_request:
 
 jobs:
-  test:
+  debian-package:
+    name: Debian ${{ matrix.release }}
     runs-on: ubuntu-latest
-    container: debian:12-slim
+    container:
+      image: ${{ matrix.image }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - release: "12 bookworm"
+            image: "debian:bookworm-slim"
+          - release: "13 trixie"
+            image: "debian:trixie-slim"
+          - release: "14 forky"
+            image: "debian:forky-slim"
 
     steps:
       - name: Install runtime and build tools
@@ -19,5 +32,51 @@ jobs:
 
       - uses: astral-sh/setup-uv@v5
 
+      - name: Show runtime versions
+        run: |
+          cat /etc/debian_version
+          python3 --version
+          python3 -c 'import dns; print("dnspython", dns.__version__)'
+
       - name: Run checks
         run: make check
+
+  uv-python:
+    name: uv ${{ matrix.label }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: "bookworm baseline"
+            python: "3.11"
+            dnspython: "2.3.0"
+          - label: "trixie baseline"
+            python: "3.13"
+            dnspython: "2.7.0"
+          - label: "forky baseline"
+            python: "3.13"
+            dnspython: "2.8.0"
+          - label: "latest upstream"
+            python: "3.x"
+            dnspython: "latest-2.x"
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: astral-sh/setup-uv@v5
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Show runtime versions
+        run: |
+          uv --cache-dir .uv-cache run python --version
+
+      - name: Run tests
+        run: make uv-test DNSPYTHON=${{ matrix.dnspython }}
+
+      - name: Show dependency version
+        run: uv --cache-dir .uv-cache run --no-sync python -c 'import dns; print("dnspython", dns.__version__)'

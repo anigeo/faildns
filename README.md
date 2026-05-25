@@ -85,16 +85,21 @@ journalctl -u faildns.service -f
 
 ## Development
 
-`make dev` creates `.venv` with uv-managed dependencies for ad hoc local runs and development tools. uv uses `dnspython>=2.3,<2.4`, matching the Debian 12 supported runtime series.
+`make dev` creates `.venv` with uv-managed dependencies for ad hoc local runs and development tools. uv uses `dnspython>=2.3,<3`, matching the supported dnspython 2.x series.
 
 ```sh
 make dev
 uv run ./faildns.py
 make format
 make check
+make uv-test
+make uv-test DNSPYTHON=2.3.0
+make uv-test DNSPYTHON=2.7.0
+make uv-test DNSPYTHON=2.8.0
+make uv-test DNSPYTHON=latest-2.x
 ```
 
-`make test` runs both unit tests and a local loopback integration test that starts `faildns.py` on random ports. By default, tests use system `python3`, so install `python3-dnspython` first. To run the tests through the uv environment instead, use `PYTHON=.venv/bin/python make test`.
+`make test` runs both unit tests and a local loopback integration test that starts `faildns.py` on random ports. By default, tests use system `python3`, so install `python3-dnspython` first. Use `make uv-test` to run the same tests in the uv-managed environment, optionally selecting `DNSPYTHON=2.3.0`, `DNSPYTHON=2.7.0`, `DNSPYTHON=2.8.0`, or `DNSPYTHON=latest-2.x`.
 
 ## License
 

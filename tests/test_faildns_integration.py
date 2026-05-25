@@ -19,10 +19,21 @@ def free_ports(count: int) -> list[int]:
     sockets = []
     try:
         for _ in range(count):
-            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            sock.bind(("127.0.0.1", 0))
-            sockets.append(sock)
-        return [sock.getsockname()[1] for sock in sockets]
+            while True:
+                tcp_sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                udp_sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+                try:
+                    tcp_sock.bind(("127.0.0.1", 0))
+                    port = tcp_sock.getsockname()[1]
+                    udp_sock.bind(("127.0.0.1", port))
+                except OSError:
+                    tcp_sock.close()
+                    udp_sock.close()
+                    continue
+
+                sockets.extend((tcp_sock, udp_sock))
+                break
+        return [sockets[index].getsockname()[1] for index in range(0, len(sockets), 2)]
     finally:
         for sock in sockets:
             sock.close()
