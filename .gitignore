@@ -1,0 +1,33 @@
+__pycache__/
+*.py[cod]
+.venv/
+.uv-cache/
+*.egg-info/
+
+# AI files
+.idea
+.claude
+.aider*
+.cursor*
+.copilot*
+*.local.md
+
+# IDE and editor files
+*.sw[op]
+.vscode/
+.idea/
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment files
+.env
+.env.local
+
+# Temporary files
+.temp/
+*.tmp
+*.bak
+*.orig

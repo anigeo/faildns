@@ -1,0 +1,21 @@
+[project]
+name = "faildns"
+version = "0.1.0"
+requires-python = ">=3.11"
+license = { file = "LICENSE" }
+dependencies = [
+    "dnspython>=2.3,<2.4",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+extend-exclude = [".uv-cache"]
+line-length = 100
+target-version = "py311"
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.14",
+]

@@ -1,0 +1,30 @@
+[Unit]
+Description=faildns DNS failure responder
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+Environment=PYTHONUNBUFFERED=1
+Environment=PYTHONDONTWRITEBYTECODE=1
+EnvironmentFile=-/etc/default/faildns
+ExecStart=/usr/local/bin/faildns
+StandardOutput=journal
+SyslogLevelPrefix=true
+Restart=on-failure
+RestartSec=2s
+
+DynamicUser=yes
+
+# Keep this if you change either listener to a privileged port such as 53.
+AmbientCapabilities=CAP_NET_BIND_SERVICE
+CapabilityBoundingSet=CAP_NET_BIND_SERVICE
+NoNewPrivileges=true
+
+PrivateTmp=true
+ProtectHome=true
+ProtectSystem=strict
+RestrictAddressFamilies=AF_INET AF_INET6
+
+[Install]
+WantedBy=multi-user.target
